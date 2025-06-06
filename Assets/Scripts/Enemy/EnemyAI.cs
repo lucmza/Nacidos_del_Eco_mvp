@@ -41,6 +41,7 @@ public class EnemyAI : MonoBehaviour
     private EnemyState _state = EnemyState.Patrolling;
 
 
+
     private void Awake()
     {
         _currentHealth = _maxHealth;
@@ -74,6 +75,7 @@ case EnemyState.Chasing:
 
         }
     }
+
 
 
     private IEnumerator PatrolRoutine()
@@ -186,6 +188,7 @@ case EnemyState.Chasing:
     }
 
 
+
     public void TakeDamage(float amount)
     {
         _currentHealth -= amount;
@@ -199,4 +202,5 @@ case EnemyState.Chasing:
         Destroy(gameObject);
     }
 }
+
 

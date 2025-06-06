@@ -1,8 +1,7 @@
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.InputSystem;
-
+using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
