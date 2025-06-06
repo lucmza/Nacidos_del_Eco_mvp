@@ -5,8 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class ButtonStart : MonoBehaviour
 {
-    public void ChangeScene(string sceneName)
+    [SerializeField] private int sceneStart = 1;
+    [SerializeField] private int lvlGame = 2;
+
+    public void ExitGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        Application.Quit();
+        Debug.Log("Salir del juego");
+    }
+    public void SceneStart()
+    {
+        SceneManager.LoadScene(sceneStart);
+    }
+
+    public void LevelGame()
+    {
+        SceneManager.LoadScene(lvlGame);
     }
 }
