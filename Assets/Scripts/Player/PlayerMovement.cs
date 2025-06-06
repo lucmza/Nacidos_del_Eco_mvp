@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     //Animation variables
     [SerializeField] private Animator _animator;
     private bool _isCrouching = false;
+    private bool _IsWalking;
+    private bool _movePressed;
 
 
     public bool OnStealth
@@ -60,20 +62,47 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _playerVelocity.y += _gravity * Time.deltaTime;
+
+        //Player Animation
+        if (!_isCrouching && _movePressed)
+        {
+            _animator.SetBool("IsWalking", true);
+            _animator.SetBool("IsCrouching", false);
+
+        }
+
+        if (!_movePressed && !_isCrouching)
+        {
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsCrouching", false);
+
+        }
+
+        if (_isCrouching && !_movePressed)
+        {
+            _animator.SetBool("IsCrouching", true);
+            _animator.SetBool("IsCrouchWalking", false);
+
+        }
+
+        if (_isCrouching && _movePressed)
+            _animator.SetBool("IsCrouchWalking", true);
+
     }
 
     private void FixedUpdate()
     {
         MovePlayer(_movementRelativeToCamera);
+        
     }
 
+    //Deshabilitado por el momento
     public void Jump(InputAction.CallbackContext context)
     {
         bool isJump = _animator.GetBool("IsJump");
         if (context.performed && _onGround)
         {
             _animator.SetBool("IsJump", true);
-            _playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
             
         }
         
@@ -81,16 +110,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer(Vector3 input)
     {
-        bool isWalking = _animator.GetBool("IsWalking");
-        bool movePressed = _input.x != 0 || _input.y != 0;
-
-        if (movePressed && !isWalking)
-            _animator.SetBool("IsWalking", true);
+        
+        _movePressed = _input.x != 0 || _input.y != 0;
+        
         
         // Por que esta dos veces?
-        _characterController.Move(input * _speed * Time.deltaTime);
+
+        Vector3 movement = new Vector3(input.x, _playerVelocity.y, input.z);
+        _characterController.Move(movement * _speed * Time.deltaTime);
         
-        _characterController.Move(_playerVelocity * Time.deltaTime);
+        //_characterController.Move(input * _speed * Time.deltaTime);
+        
+        //_characterController.Move(_playerVelocity * Time.deltaTime);
         //_playerRb.MovePosition(transform.position + input * _speed * Time.deltaTime);
 
     }
@@ -133,7 +164,7 @@ public class PlayerMovement : MonoBehaviour
                 _playerCollider.height = crouchingHeight;
                 _playerCollider.center = new Vector3(0, 0.45f, 0);
                 _speed = _CrouchingSpeed;
-                _animator.SetBool("IsCrouching", _isCrouching);
+                //_animator.SetBool("IsCrouching", _isCrouching);
                 _onStealth = true;
                 Debug.Log(_onStealth);
             }
@@ -142,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
                 _playerCollider.height = standingHeight;
                 _playerCollider.center = new Vector3(0, 0.9f, 0);
                 _speed = _WalkingSpeed;
-                _animator.SetBool("IsCrouching", _isCrouching);
+                //_animator.SetBool("IsCrouching", _isCrouching);
                 _onStealth = false;
                 Debug.Log(_onStealth);
             }
