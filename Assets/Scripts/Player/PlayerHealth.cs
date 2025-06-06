@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _maxHealth = 100f;

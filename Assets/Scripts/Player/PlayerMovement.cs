@@ -18,18 +18,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _playerVelocity;
 
     private bool _onStealth = false;
+
     private bool _onGround;
     
     //Animation variables
     [SerializeField] private Animator _animator;
     private bool _isCrouching = false;
-   
 
-   public bool OnStealth 
+
+    public bool OnStealth
     {
         get { return _onStealth; }
     }
-   
+
 
     private void Awake()
     {
@@ -42,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _speed = _WalkingSpeed;
-        
+
     }
 
 
@@ -85,13 +86,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (movePressed && !isWalking)
             _animator.SetBool("IsWalking", true);
-
-        if ((!movePressed && isWalking))
-            _animator.SetBool("IsWalking", false);
-           
-
         
-        
+        // Por que esta dos veces?
         _characterController.Move(input * _speed * Time.deltaTime);
         
         _characterController.Move(_playerVelocity * Time.deltaTime);
@@ -108,9 +104,9 @@ public class PlayerMovement : MonoBehaviour
         posToLookAt.z = _movementRelativeToCamera.z;
         posToLookAt = posToLookAt.normalized;
 
-        
+
         Quaternion targetRotation = posToLookAt == Vector3.zero ? transform.rotation : Quaternion.LookRotation(posToLookAt);
-        
+
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
@@ -128,17 +124,18 @@ public class PlayerMovement : MonoBehaviour
         float standingHeight = 1.8f;
         float crouchingHeight = 0.9f;
 
-        if(callbackContext.performed)
+        if (callbackContext.performed)
         {
+
             _isCrouching = !_isCrouching;
-            if(_isCrouching)
+            if (_isCrouching)
             {
                 _playerCollider.height = crouchingHeight;
                 _playerCollider.center = new Vector3(0, 0.45f, 0);
                 _speed = _CrouchingSpeed;
                 _animator.SetBool("IsCrouching", _isCrouching);
                 _onStealth = true;
-
+                Debug.Log(_onStealth);
             }
             else
             {
@@ -147,9 +144,10 @@ public class PlayerMovement : MonoBehaviour
                 _speed = _WalkingSpeed;
                 _animator.SetBool("IsCrouching", _isCrouching);
                 _onStealth = false;
+                Debug.Log(_onStealth);
             }
         }
-        
-        
+
+
     }
 }
