@@ -1,4 +1,8 @@
+using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine.InputSystem;
 using UnityEngine;
+
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
@@ -9,7 +13,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         _currentHealth = _maxHealth;
     }
-    
+
     public void TakeDamage(float amount)
     {
         _currentHealth -= amount;
@@ -24,5 +28,21 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Die()
     {
         Debug.Log("Player died!");
+
+        // Bloquear movimiento
+        PlayerInput input = GetComponent<PlayerInput>();
+        if (input != null) input.enabled = false;
+
+        // Se podria poner animacion de muerte
+
+        // Esperar 2 segundos y cargar la escena de Game Over
+        StartCoroutine(HandleDeath());
     }
+
+    private IEnumerator HandleDeath()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("GameOver");
+    }
+
 }
