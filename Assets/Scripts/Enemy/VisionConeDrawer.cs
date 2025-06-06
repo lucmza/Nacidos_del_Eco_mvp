@@ -21,6 +21,16 @@ public class VisionConeDrawer : MonoBehaviour
         GenerateMesh();
     }
 
+    public void SetRange(float range)
+    {
+        _visionRange = range;
+    }
+
+    public void SetAngle(float angle)
+    {
+        _visionAngle = angle;
+    }
+
     private void GenerateMesh()
     {
         Vector3[] vertices = new Vector3[_segments + 2];
@@ -28,7 +38,7 @@ public class VisionConeDrawer : MonoBehaviour
 
         vertices[0] = Vector3.zero;
 
-        float angleStep = (_visionAngle * 2) / _segments;
+        float angleStep = (_visionAngle * 2f) / _segments;
 
         for (int i = 0; i <= _segments; i++)
         {
@@ -50,6 +60,5 @@ public class VisionConeDrawer : MonoBehaviour
         _mesh.triangles = triangles;
         _mesh.RecalculateNormals();
         _mesh.RecalculateBounds();
-
     }
 }
