@@ -45812,6 +45812,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4203094764607002461, guid: e6e9c593169087a4ebc58a16ed28eec4, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4756208944732515290, guid: e6e9c593169087a4ebc58a16ed28eec4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 504.4
@@ -66642,6 +66646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1586174762}
+  - component: {fileID: 1586174763}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -66666,6 +66671,19 @@ Transform:
   - {fileID: 573891644}
   m_Father: {fileID: 1712877635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1586174763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586174760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f781718197db94f811939fa1f822d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: SceneStart
 --- !u!1 &1586295324
 GameObject:
   m_ObjectHideFlags: 0
@@ -86562,11 +86580,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8449254776568632200, guid: d13a387cde46610408ef127206b72747, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 8449254776568632200, guid: d13a387cde46610408ef127206b72747, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.000015258789
+      value: -47.89
       objectReference: {fileID: 0}
     - target: {fileID: 8449254776568632200, guid: d13a387cde46610408ef127206b72747, type: 3}
       propertyPath: m_LocalRotation.w
@@ -86599,6 +86617,10 @@ PrefabInstance:
     - target: {fileID: 8516666521546301079, guid: d13a387cde46610408ef127206b72747, type: 3}
       propertyPath: _playerLayer.m_Bits
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516666521546301079, guid: d13a387cde46610408ef127206b72747, type: 3}
+      propertyPath: _detectionRangeWhenLoud
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
