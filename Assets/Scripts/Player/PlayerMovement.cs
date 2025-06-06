@@ -3,9 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float _jumpForce = 10f;
-    [SerializeField] private float _WalkingSpeed = 10f;
-    [SerializeField] private float _CrouchingSpeed = 10f;
+    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _WalkingSpeed;
+    [SerializeField] private float _CrouchingSpeed;
     private float _speed;
     private Rigidbody _playerRb;
     private PlayerInput _playerInput;
@@ -105,28 +105,31 @@ public class PlayerMovement : MonoBehaviour
 
     public void Crouch(InputAction.CallbackContext callbackContext)
     {
-        float standingHeight = 2f;
-        float crouchingHeight = 0.75f;
+        float standingHeight = 1.8f;
+        float crouchingHeight = 0.9f;
 
         if(callbackContext.performed)
         {
-            Debug.Log("ccc");
-            _playerCollider.height = crouchingHeight;
-            _playerCollider.center = new Vector3(0, -0.5f, 0);
-            _speed = _CrouchingSpeed;
             _isCrouching = !_isCrouching;
-            _animator.SetBool("IsCrouching", _isCrouching);
-            _onStealth = true;
-        }
-        if (callbackContext.canceled)
-        {
-            _playerCollider.height = standingHeight;
-            _playerCollider.center = Vector3.zero;
-            _speed = _WalkingSpeed;
-            
-            _onStealth = false;
+            if(_isCrouching)
+            {
+                _playerCollider.height = crouchingHeight;
+                _playerCollider.center = new Vector3(0, 0.45f, 0);
+                _speed = _CrouchingSpeed;
+                _animator.SetBool("IsCrouching", _isCrouching);
+                _onStealth = true;
 
+            }
+            else
+            {
+                _playerCollider.height = standingHeight;
+                _playerCollider.center = new Vector3(0, 0.9f, 0);
+                _speed = _WalkingSpeed;
+                _animator.SetBool("IsCrouching", _isCrouching);
+                _onStealth = false;
+            }
         }
+        
         
     }
 }
