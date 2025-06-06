@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -7,13 +8,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _WalkingSpeed;
     [SerializeField] private float _CrouchingSpeed;
     private float _speed;
-    private Rigidbody _playerRb;
+    private float _gravity = -9.8f;
+    //private Rigidbody _playerRb;
     private PlayerInput _playerInput;
     private CapsuleCollider _playerCollider;
+    private CharacterController _characterController;
     private Vector2 _input;
     private Vector3 _movementRelativeToCamera;
+    private Vector3 _playerVelocity;
 
     private bool _onStealth = false;
+    private bool _onGround;
     
     //Animation variables
     [SerializeField] private Animator _animator;
@@ -28,9 +33,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _playerRb = GetComponent<Rigidbody>();
+        //_playerRb = GetComponent<Rigidbody>();
         _playerInput = GetComponent<PlayerInput>();
         _playerCollider = GetComponent<CapsuleCollider>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
@@ -42,9 +48,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        _onGround = _characterController.isGrounded;
         _input = _playerInput.actions["Move"].ReadValue<Vector2>();
         _movementRelativeToCamera = MoveRelativeToCamera(_input);
         RotatePlayer();
+
+        if(_onGround && _playerVelocity.y < 0)
+        {
+            _playerVelocity.y = 0;
+        }
+
+        _playerVelocity.y += _gravity * Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -55,9 +69,13 @@ public class PlayerMovement : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         bool isJump = _animator.GetBool("IsJump");
-        if (context.performed)
+        if (context.performed && _onGround)
+        {
             _animator.SetBool("IsJump", true);
-        _playerRb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            _playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
+            
+        }
+        
     }
 
     private void MovePlayer(Vector3 input)
@@ -74,9 +92,11 @@ public class PlayerMovement : MonoBehaviour
 
         
         
+        _characterController.Move(input * _speed * Time.deltaTime);
+        
+        _characterController.Move(_playerVelocity * Time.deltaTime);
+        //_playerRb.MovePosition(transform.position + input * _speed * Time.deltaTime);
 
-        _playerRb.MovePosition(transform.position + input * _speed * Time.deltaTime);
-       
     }
 
     private void RotatePlayer()

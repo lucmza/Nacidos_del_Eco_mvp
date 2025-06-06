@@ -20,9 +20,8 @@ public enum EnemyState
 public class EnemyAI : MonoBehaviour
 {
     // Movimiento
-    [SerializeField] private float _speed = 3f;
-    [SerializeField] private float _idealDistance = 1.2f;
-    [SerializeField] private float _orbitSpeed = 1f;
+    [SerializeField] private float _patrolSpeed = 2f;
+    [SerializeField] private float _chaseSpeed = 4f;
     [SerializeField] private List<PatrolPoint> _patrolPoints;
     private int _currentPointIndex = 0;
     private bool _isChasing = false;
@@ -41,6 +40,7 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody _rb;
     private EnemyState _state = EnemyState.Patrolling;
 
+
     private void Awake()
     {
         _currentHealth = _maxHealth;
@@ -57,28 +57,24 @@ public class EnemyAI : MonoBehaviour
         switch (_state)
         {
             case EnemyState.Patrolling:
-                MoveTowardsTarget(_currentTarget);
+                MoveTowardsTarget(_currentTarget, _patrolSpeed);
                 break;
 
             case EnemyState.Chasing:
                 if (_playerTransform != null)
                 {
-                    float dist = Vector3.Distance(transform.position, _playerTransform.position);
+                    MoveTowardsTarget(_playerTransform.position, _chaseSpeed);
 
-                    // Ataca si está en rango y no está haciendo wind-up
-                    if (!_isWindingUp && dist <= _attackRange)
+                    if (!_isWindingUp && IsPlayerInAttackRange())
                     {
                         StartCoroutine(AttackRoutine());
-                    }
-                    else
-                    {
-                        MoveAroundPlayer();
                     }
                 }
                 break;
 
         }
     }
+
 
     private IEnumerator PatrolRoutine()
     {
@@ -98,36 +94,13 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void MoveAroundPlayer()
-    {
-        if (_playerTransform == null) return;
-
-        Vector3 toPlayer = _playerTransform.position - transform.position;
-        toPlayer.y = 0;
-
-        float distance = toPlayer.magnitude;
-
-        // Movimiento radial (acercarse o alejarse)
-        float distanceDelta = distance - _idealDistance;
-        Vector3 radialDir = toPlayer.normalized * distanceDelta;
-
-        // Movimiento tangencial (orbitar)
-        Vector3 tangentDir = Vector3.Cross(toPlayer.normalized, Vector3.up);
-
-        // Combinar ambos
-        Vector3 finalMove = (radialDir + tangentDir * _orbitSpeed).normalized;
-
-        _rb.MovePosition(transform.position + finalMove * _speed * Time.fixedDeltaTime);
-        LookAtTarget(_playerTransform.position);
-    }
-
 
     private IEnumerator AttackRoutine()
     {
         _isWindingUp = true;
         _state = EnemyState.PreAttack;
 
-        float timer = 0.75f;
+        float timer = 0.3f;
         while (timer > 0f)
         {
             if (!IsPlayerInAttackRange())
@@ -158,39 +131,19 @@ public class EnemyAI : MonoBehaviour
     }
 
     // Movimiento hacia target
-    private void MoveTowardsTarget(Vector3 target)
+    private void MoveTowardsTarget(Vector3 target, float speed)
     {
         Vector3 dir = target - transform.position;
         dir.y = 0;
         if (dir.sqrMagnitude < 0.01f) return;
 
-        Vector3 move = dir.normalized * _speed * Time.fixedDeltaTime;
+        Vector3 move = dir.normalized * speed * Time.fixedDeltaTime;
         _rb.MovePosition(transform.position + move);
 
         Vector3 lookAt = new Vector3(target.x, transform.position.y, target.z);
         transform.LookAt(lookAt);
     }
 
-    // Orbitar al jugador manteniendo la distancia ideal
-    private void OrbitPlayer()
-    {
-        Vector3 toPlayer = _playerTransform.position - transform.position;
-        float dist = toPlayer.magnitude;
-
-        // Si está demasiado lejos, acercarse
-        if (dist > _idealDistance + 0.1f)
-        {
-            Vector3 move = toPlayer.normalized * _speed * Time.fixedDeltaTime;
-            _rb.MovePosition(transform.position + move);
-        }
-
-        // Agregamos leve movimiento orbital
-        Vector3 orbitDirection = Vector3.Cross(toPlayer.normalized, Vector3.up); // giro horizontal
-        Vector3 orbitMove = orbitDirection * _orbitSpeed * Time.fixedDeltaTime;
-        _rb.MovePosition(transform.position + orbitMove);
-
-        LookAtTarget(_playerTransform.position);
-    }
 
     public void SetTarget(Transform player)
     {
@@ -219,21 +172,19 @@ public class EnemyAI : MonoBehaviour
 
     private void TryAttack()
     {
-        Debug.Log("TRYATTACK CALLED");
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         Collider[] hits = Physics.OverlapSphere(origin, _attackRange);
-        Debug.Log($"Checking for targets in range: {hits.Length} colliders found.");
 
         foreach (var h in hits)
         {
-            Debug.Log($"Detected collider: {h.name}");
             if (h.CompareTag("Player") && h.TryGetComponent<IDamageable>(out var d))
             {
-                d.TakeDamage(20f);
-                Debug.Log("Damage applied to player!");
+                d.TakeDamage(999f);
+                Debug.Log("Player destroyed!");
             }
         }
     }
+
 
     public void TakeDamage(float amount)
     {
@@ -248,3 +199,4 @@ public class EnemyAI : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
