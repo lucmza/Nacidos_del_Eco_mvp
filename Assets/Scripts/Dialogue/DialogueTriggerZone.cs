@@ -73,7 +73,7 @@ public class DialogueTriggerZone : MonoBehaviour
         { 
 
         StartDialogue();
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 10f);
 
         }
     }
