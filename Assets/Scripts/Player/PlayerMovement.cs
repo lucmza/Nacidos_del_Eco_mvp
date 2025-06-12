@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed && _onGround)
         {
             _animator.SetBool("IsJump", true);
-            
+            _playerVelocity.y = Mathf.Sqrt(_jumpForce * -1f * _gravity);
         }
         
     }
