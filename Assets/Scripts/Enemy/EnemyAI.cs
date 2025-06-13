@@ -20,6 +20,7 @@ public enum EnemyState
 public class EnemyAI : MonoBehaviour
 {
     // Movimiento
+    [SerializeField] private bool _startStatic = false;
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private float _chaseSpeed = 4f;
     [SerializeField] private List<PatrolPoint> _patrolPoints;
@@ -50,7 +51,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(PatrolRoutine());
+        if (!_startStatic)
+            StartCoroutine(PatrolRoutine());
     }
 
     private void FixedUpdate()
@@ -58,20 +60,20 @@ public class EnemyAI : MonoBehaviour
         switch (_state)
         {
             case EnemyState.Patrolling:
-    MoveTowardsTarget(_currentTarget, _patrolSpeed);
-    break;
+                MoveTowardsTarget(_currentTarget, _patrolSpeed);
+                break;
 
-case EnemyState.Chasing:
-    if (_playerTransform != null)
-    {
-        MoveTowardsTarget(_playerTransform.position, _chaseSpeed);
+            case EnemyState.Chasing:
+                if (_playerTransform != null)
+                {
+                    MoveTowardsTarget(_playerTransform.position, _chaseSpeed);
 
-        if (!_isWindingUp && IsPlayerInAttackRange())
-        {
-            StartCoroutine(AttackRoutine());
-        }
-    }
-    break;
+                    if (!_isWindingUp && IsPlayerInAttackRange())
+                    {
+                        StartCoroutine(AttackRoutine());
+                    }
+                }
+                break;
 
         }
     }

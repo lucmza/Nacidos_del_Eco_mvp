@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _WalkingSpeed;
     [SerializeField] private float _CrouchingSpeed;
     private float _speed;
-    private float _gravity = -9.8f;
+    [SerializeField] private float _gravity = -9.8f;
     //private Rigidbody _playerRb;
     private PlayerInput _playerInput;
     private CapsuleCollider _playerCollider;
