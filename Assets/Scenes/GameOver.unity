@@ -653,8 +653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9b579561a87644bb749534b025c442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneStart: 1
-  lvlGame: 2
+  sceneMainMenu: 1
+  sceneLevelGame: 2
 --- !u!1 &1187422427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,8 +1154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9b579561a87644bb749534b025c442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneStart: 1
-  lvlGame: 2
+  sceneMainMenu: 1
+  sceneLevelGame: 2
 --- !u!114 &1788419564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,7 +1202,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1186097865}
         m_TargetAssemblyTypeName: ButtonStart, Assembly-CSharp
-        m_MethodName: LevelGame
+        m_MethodName: StartNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

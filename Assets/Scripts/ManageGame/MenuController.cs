@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
 
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
-            
+            Debug.Log("F PRESSED!");
             if (isMenuOpen)
                 CloseMenuPrincipal();
             else

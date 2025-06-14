@@ -5,21 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class ButtonStart : MonoBehaviour
 {
-    [SerializeField] private int sceneStart = 1;
-    [SerializeField] private int lvlGame = 2;
+    [Header("Índices de Escena")]
+    [Tooltip("Escena de Menú Principal")]
+    [SerializeField] private int sceneMainMenu = 1;
+    [Tooltip("Escena de Nivel de Juego")]
+    [SerializeField] private int sceneLevelGame = 2;
+
+ 
 
     public void ExitGame()
     {
         Application.Quit();
         Debug.Log("Salir del juego");
     }
-    public void SceneStart()
-    {
-        SceneManager.LoadScene(sceneStart);
-    }
 
-    public void LevelGame()
+ 
+
+    public void StartNewGame()
     {
-        SceneManager.LoadScene(lvlGame);
+        Time.timeScale = 1f;
+       
+        SceneManager.LoadScene(sceneLevelGame);
     }
 }
+

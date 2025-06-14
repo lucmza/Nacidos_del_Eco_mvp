@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class FragmentCounterUI : MonoBehaviour
 {
-    [SerializeField] private Text counterText;
+    [SerializeField] private TextMeshProUGUI counterText;
 
     // Tiene que ser la misma cantidad que en el manager, podriamos obtenerlo de ahi pero por ahora lo dejo asi
     [SerializeField] private int totalNecesario = 5;
