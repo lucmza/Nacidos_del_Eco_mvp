@@ -19,7 +19,10 @@ public class ButtonStart : MonoBehaviour
         Debug.Log("Salir del juego");
     }
 
- 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(sceneMainMenu);
+    }
 
     public void StartNewGame()
     {
