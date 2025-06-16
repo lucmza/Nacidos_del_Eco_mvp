@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneStart.unity
     guid: db259629482b7a6448c209c4065d7090
   - enabled: 1
-    path: Assets/Scenes/Mapaedit.unity
+    path: Assets/Scenes/Level_1.unity
     guid: f37513b0d138429419047d03f392b007
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
