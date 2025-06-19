@@ -42,9 +42,9 @@ public class MenuController : MonoBehaviour
     void Update()
     {
 
-        if (Keyboard.current.fKey.wasPressedThisFrame)
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            Debug.Log("F PRESSED!");
+            Debug.Log("ESC PRESSED!");
             if (isMenuOpen)
                 CloseMenuPrincipal();
             else
@@ -106,6 +106,7 @@ public class MenuController : MonoBehaviour
     
     private void OnExitGamePressed()
     {
+        Debug.Log("Salir del juego");
         Application.Quit();
 
         
