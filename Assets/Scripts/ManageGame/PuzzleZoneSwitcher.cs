@@ -12,7 +12,7 @@ public class PuzzleZoneSwitcher : MonoBehaviour
 
     void Awake()
     {
-        // Guardamos la prioridad original para restaurarla luego
+        
         if (puzzleCam == null)
             Debug.LogError("PuzzleZoneSwitcher necesita asignar puzzleCam.");
         else
