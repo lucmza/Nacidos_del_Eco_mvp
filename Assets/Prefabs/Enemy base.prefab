@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3044553061382641118}
   - component: {fileID: 3323416397612683584}
   - component: {fileID: 6190133099775020678}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: VisionCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 6871872319329594224}
   - component: {fileID: 6322304657340462394}
   - component: {fileID: 4273347592477036686}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: VisionCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1833f4a675780664b91fdb17ecd0c7b6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1833f4a675780664b91fdb17ecd0c7b6, type: 3}
       propertyPath: m_LocalPosition.z

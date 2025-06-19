@@ -11,6 +11,7 @@ public struct PatrolPoint
 
 public enum EnemyState
 {
+    Idle,
     Patrolling,
     Chasing,
     PreAttack,
@@ -40,9 +41,7 @@ public class EnemyAI : MonoBehaviour
 
     private Transform _playerTransform;
     private Rigidbody _rb;
-    private EnemyState _state = EnemyState.Patrolling;
-
-
+    private EnemyState _state;
 
     private void Awake()
     {
@@ -53,9 +52,17 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        if (!_startStatic)
+        if (_startStatic)
+        {
+            _state = EnemyState.Idle;
+        }
+        else
+        {
+            _state = EnemyState.Patrolling;
             StartCoroutine(PatrolRoutine());
+        }
     }
+
 
     private void FixedUpdate()
     {
@@ -145,28 +152,39 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 dir = target - transform.position;
         dir.y = 0;
-        if (dir.sqrMagnitude < 0.01f) return;
+
+        if (dir.sqrMagnitude < 0.01f)
+        {
+            if (_anim != null)
+                _anim.SetFloat("Speed", 0f);
+            return;
+        }
 
         Vector3 move = dir.normalized * speed * Time.fixedDeltaTime;
         _rb.MovePosition(transform.position + move);
 
         Vector3 lookAt = new Vector3(target.x, transform.position.y, target.z);
         transform.LookAt(lookAt);
+
         if (_anim != null)
         {
             float actualSpeed = move.magnitude / Time.fixedDeltaTime;
             _anim.SetFloat("Speed", actualSpeed);
         }
-
     }
+
 
 
     public void SetTarget(Transform player)
     {
+        if (_state == EnemyState.Attacking || _state == EnemyState.PreAttack)
+            return;
+
         _playerTransform = player;
         _isChasing = true;
         _state = EnemyState.Chasing;
     }
+
 
     private void LookAtTarget(Vector3 target)
     {

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -29,6 +28,22 @@ public class PlayerMovement : MonoBehaviour
     private bool _movePressed;
 
 
+    //Audio
+    [SerializeField] private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip stepGrass;
+    [SerializeField] private AudioClip stepConcrete;
+    private bool _wasOnGroundLastFrame = false;
+    [SerializeField] private AudioClip landSound;
+    private bool _wasGroundedLastFrame = false;
+    private bool _wasFallingLastFrame = false;
+
+
+    [SerializeField] private float stealthStepMultiplier = 1.3f;
+    private float baseStepInterval;
+    [SerializeField] private float stepInterval = 0.4f;
+    private float stepTimer;
+
+
     public bool OnStealth
     {
         get { return _onStealth; }
@@ -46,13 +61,29 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _speed = _WalkingSpeed;
-
+        baseStepInterval = stepInterval;
     }
+
 
 
     private void Update()
     {
-        _onGround = _characterController.isGrounded;
+        bool groundedNow = IsActuallyOnGround();
+
+        bool wasFalling = _wasFallingLastFrame;
+
+        _onGround = groundedNow;
+
+        // Detectar aterrizaje solo si estaba cayendo antes
+        if (groundedNow && !_wasGroundedLastFrame && wasFalling)
+        {
+            PlayLandSound();
+        }
+
+        // Guardar estados
+        _wasGroundedLastFrame = groundedNow;
+        _wasFallingLastFrame = _playerVelocity.y < -0.1f;
+
         _input = _playerInput.actions["Move"].ReadValue<Vector2>();
         _movementRelativeToCamera = MoveRelativeToCamera(_input);
         RotatePlayer();
@@ -65,10 +96,28 @@ public class PlayerMovement : MonoBehaviour
         _playerVelocity.y += _gravity * Time.deltaTime;
 
         // Animation
-        // Calcular magnitud de la velocidad horizontal
         _animator.SetFloat("IsWalking", _horizontalSpeed);
 
+        // Pasos
+        bool isMoving = _horizontalSpeed > 0.1f && _onGround;
+        if (isMoving)
+        {
+            stepInterval = _onStealth ? baseStepInterval * stealthStepMultiplier : baseStepInterval;
+
+            stepTimer += Time.deltaTime;
+            if (stepTimer == 0f) PlayFootstep();
+            if (stepTimer >= stepInterval)
+            {
+                PlayFootstep();
+                stepTimer = 0f;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
+        }
     }
+
 
     private void FixedUpdate()
     {
@@ -152,7 +201,44 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log(_onStealth);
             }
         }
-
-
     }
+
+    private bool IsActuallyOnGround()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        float rayLength = 0.4f;
+
+        return Physics.Raycast(origin, Vector3.down, rayLength);
+    }
+
+    private void PlayFootstep()
+    {
+        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.5f))
+        {
+            string tag = hit.collider.tag;
+            AudioClip clipToPlay = stepGrass;
+
+            if (tag == "Concrete") clipToPlay = stepConcrete;
+            else if (tag == "Grass") clipToPlay = stepGrass;
+
+            if (footstepAudioSource && clipToPlay)
+            {
+                footstepAudioSource.pitch = Random.Range(0.9f, 1.1f);
+
+                footstepAudioSource.PlayOneShot(clipToPlay);
+            }
+
+        }
+    }
+
+    private void PlayLandSound()
+    {
+        if (footstepAudioSource && landSound)
+        {
+            footstepAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            footstepAudioSource.PlayOneShot(landSound);
+        }
+    }
+
 }
