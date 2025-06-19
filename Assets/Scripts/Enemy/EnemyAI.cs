@@ -19,6 +19,7 @@ public enum EnemyState
 
 public class EnemyAI : MonoBehaviour
 {
+    private Animator _anim;
     // Movimiento
     [SerializeField] private bool _startStatic = false;
     [SerializeField] private float _patrolSpeed = 2f;
@@ -45,6 +46,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
+        _anim = GetComponentInChildren<Animator>();
         _currentHealth = _maxHealth;
         _rb = GetComponent<Rigidbody>();
     }
@@ -57,6 +59,11 @@ public class EnemyAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_state != EnemyState.Patrolling && _state != EnemyState.Chasing)
+        {
+            if (_anim != null)
+                _anim.SetFloat("Speed", 0f);
+        }
         switch (_state)
         {
             case EnemyState.Patrolling:
@@ -74,7 +81,6 @@ public class EnemyAI : MonoBehaviour
                     }
                 }
                 break;
-
         }
     }
 
@@ -146,6 +152,12 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 lookAt = new Vector3(target.x, transform.position.y, target.z);
         transform.LookAt(lookAt);
+        if (_anim != null)
+        {
+            float actualSpeed = move.magnitude / Time.fixedDeltaTime;
+            _anim.SetFloat("Speed", actualSpeed);
+        }
+
     }
 
 
@@ -204,5 +216,3 @@ public class EnemyAI : MonoBehaviour
         Destroy(gameObject);
     }
 }
-
-
