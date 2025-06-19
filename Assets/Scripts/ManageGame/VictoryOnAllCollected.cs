@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class VictoryOnAllCollected : MonoBehaviour
 {
-    [SerializeField] private string sceneToLoad = "VictoryScene";
+    [SerializeField] private string sceneToLoad = "Victory";
 
     private void Start()
     {

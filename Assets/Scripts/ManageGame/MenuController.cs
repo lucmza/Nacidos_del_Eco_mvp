@@ -12,8 +12,7 @@ public class MenuController : MonoBehaviour
     public GameObject hudGameplayContainer;
     [Tooltip("Panel del menú principal")]
     public GameObject menuPrincipalPanel;
-    [Tooltip("Panel del sub‐menú 'Misiones'")]
-    public GameObject misionesPanel;
+   
 
     [Header("Botones del Menú Principal")]
     public Button buttonBackToGame;  
@@ -30,7 +29,7 @@ public class MenuController : MonoBehaviour
        
         hudGameplayContainer.SetActive(true);
         menuPrincipalPanel.SetActive(false);
-        misionesPanel.SetActive(false);
+        
 
         
         buttonBackToGame.onClick.AddListener(OnBackToGamePressed);
@@ -65,7 +64,7 @@ public class MenuController : MonoBehaviour
         menuPrincipalPanel.SetActive(true);
 
       
-        misionesPanel.SetActive(false);
+       
 
        
         Time.timeScale = 0f;
@@ -77,7 +76,7 @@ public class MenuController : MonoBehaviour
 
        
         menuPrincipalPanel.SetActive(false);
-        misionesPanel.SetActive(false);
+        
 
       
         hudGameplayContainer.SetActive(true);
@@ -100,7 +99,7 @@ public class MenuController : MonoBehaviour
         
         menuPrincipalPanel.SetActive(false);
 
-        misionesPanel.SetActive(true);
+     
     }
 
     
@@ -119,7 +118,7 @@ public class MenuController : MonoBehaviour
     private void OnBackFromMisionesPressed()
     {
       
-        misionesPanel.SetActive(false);
+        
 
       
         menuPrincipalPanel.SetActive(true);
